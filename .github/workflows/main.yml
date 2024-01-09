@@ -10,4 +10,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: "Runs sync action"
-        uses: "./.github/actions/sync-nova.yml"
+        uses: "./.github/actions/sync-nova"
