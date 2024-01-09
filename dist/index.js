@@ -34088,12 +34088,12 @@ async function main() {
   const last_nova_release = nova_prod_releases[nova_prod_releases.length - 1];
 
   if (current_release) {
-    const current_release_idx = releases_sorted.indexOf(current_release);
-    next_prod_release = releases_sorted[current_release_idx + 1];
+    const current_release_idx = nova_prod_releases.indexOf(current_release);
+    next_prod_release = nova_prod_releases[current_release_idx + 1];
     has_more_releases = next_prod_release !== last_nova_release;
   } else {
     // If we don't have existing releases, let's download the two latest
-    next_prod_release = releases_sorted.slice(-2)[0];
+    next_prod_release = nova_prod_releases.slice(-2)[0];
     has_more_releases = true;
   }
 
