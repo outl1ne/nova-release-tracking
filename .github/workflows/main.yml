@@ -9,5 +9,5 @@ jobs:
     name: "Syncs Laravel Nova Releases"
     steps:
       - name: "Runs sync action"
-      - uses: "actions/checkout@v4"
+        uses: actions/checkout@v4
         uses: "./.github/actions/sync-action.yml"
