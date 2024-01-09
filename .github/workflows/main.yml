@@ -1,0 +1,11 @@
+on:
+  schedule:
+    # everyday at midnight
+    - cron: "0 0 * * *"
+jobs:
+  sync_laravel_nova_job:
+    runs-on: ubuntu-latest
+    name: "Syncs Laravel Nova Releases"
+    steps:
+      - name: "Runs sync action"
+        uses: "./.github/actions/sync-action.yml"

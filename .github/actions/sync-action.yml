@@ -1,0 +1,5 @@
+name: "Laravel Nova Sync Action"
+description: "Syncs laravel nova to custom repository"
+runs:
+  using: "node20"
+  main: "dist/index.js"
