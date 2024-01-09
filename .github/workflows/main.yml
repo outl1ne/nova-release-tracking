@@ -1,7 +1,8 @@
 on:
-  schedule:
-    # everyday at midnight
-    - cron: "0 0 * * *"
+  [push]
+  # schedule:
+  #   # everyday at midnight
+  #   - cron: "-1 0 * * *"
 jobs:
   sync_laravel_nova_job:
     runs-on: ubuntu-latest
