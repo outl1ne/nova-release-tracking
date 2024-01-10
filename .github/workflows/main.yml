@@ -29,6 +29,8 @@ jobs:
           git config --global user.name "Kaspar Rosin"
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           rm -rf
+          git status
           git add .
+          git status
           git commit -m "test"
           git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }}
