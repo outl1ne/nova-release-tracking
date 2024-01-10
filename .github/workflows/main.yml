@@ -13,4 +13,5 @@ jobs:
         uses: "./.github/actions/sync-nova"
         with:
           target_nova_repo: ${{ vars.TARGET_NOVA_REPO }}
-          personal_access_token: ${{ env.NOVA_REPO_ACCESS_TOKEN }}
+        env:
+          personal_access_token: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}

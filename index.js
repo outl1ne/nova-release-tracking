@@ -5,7 +5,7 @@ import { compare } from "semver";
 const nova_url = "https://nova.laravel.com";
 
 async function run() {
-  const token = getInput("personal_access_tohken");
+  const token = process.env.personal_access_token;
   const [owner, repo] = getInput("target_nova_repo");
   const octokit = getOctokit(token);
 
