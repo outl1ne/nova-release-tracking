@@ -34,6 +34,7 @@ jobs:
           git rm -rf .
           AUTH_ENCODED=$(echo "${NOVA_USER}:${NOVA_PASSWORD}"| base64)
           echo $NOVA_USER
+          echo "IN THE MIDDLE"
           echo ${{ secrets.NOVA_USER }}
           wget -d --header="Authorization: Basic ${AUTH_ENCODED}" ${{ steps.release.outputs.nova_dist_url }}
           git add .
