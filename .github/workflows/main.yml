@@ -9,15 +9,18 @@ jobs:
     name: "Syncs Laravel Nova Releases"
     steps:
       - uses: actions/checkout@v4
+
       - name: "Runs sync action"
         id: "releases"
         uses: "./.github/actions/sync-nova"
         with:
           target_nova_repo: ${{ vars.TARGET_NOVA_REPO }}
           personal_access_token: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
-      - uses: action/checkout@v4
+
+      - uses: actions/checkout@v4
         with:
           repository: ${{ vars.TARGET_NOVA_REPO }}
           token: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
+
       - name: "Create branch and commit changes"
         run: "ls -la"
