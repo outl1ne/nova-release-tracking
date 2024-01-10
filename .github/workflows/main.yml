@@ -24,15 +24,17 @@ jobs:
 
       - name: "Create branch and commit changes"
         env:
-          nova_user: ${{ secrets.NOVA_USER }}
-          nova_password: ${{ secrets.NOVA_4_PASSWORD }}
+          NOVA_USER: ${{ secrets.NOVA_USER }}
+          NOVA_PASSWORD: ${{ secrets.NOVA_4_PASSWORD }}
         run: |
           ls -la
           git config --global user.email "kaspar.rosin@gmail.com"
           git config --global user.name "Kaspar Rosin"
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           git rm -rf .
-          AUTH_ENCODED=$(echo "${nova_user}:${nova_password}"| base64)
+          AUTH_ENCODED=$(echo "${NOVA_USER}:${NOVA_PASSWORD}"| base64)
+          echo $NOVA_USER
+          echo ${{ secrets.NOVA_USER }}
           wget -d --header="Authorization: Basic ${AUTH_ENCODED}" ${{ steps.release.outputs.nova_dist_url }}
           git add .
           git commit -m "test"
