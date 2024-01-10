@@ -37,6 +37,7 @@ jobs:
           echo "Value of NOVA_USER: ${NOVA_USER}"
           echo "IN THE MIDDLE"
           echo ${{ secrets.NOVA_USER }}
+          echo $AUTH_ENCODED
           echo "TARGET NOVA REPO:"
           echo ${{ vars.TARGET_NOVA_REPO }}
           echo "END OF DEBUG"
