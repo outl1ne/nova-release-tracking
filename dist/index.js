@@ -34111,7 +34111,7 @@ __nccwpck_require__.r(__webpack_exports__);
 const nova_url = "https://nova.laravel.com";
 
 async function run() {
-  const token = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("personal_access_tohken");
+  const token = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("personal_access_token");
   const [owner, repo] = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("target_nova_repo");
   const octokit = (0,_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(token);
 
