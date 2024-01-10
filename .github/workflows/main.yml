@@ -41,7 +41,7 @@ jobs:
           echo "TARGET NOVA REPO:"
           echo ${{ vars.TARGET_NOVA_REPO }}
           echo "END OF DEBUG"
-          wget -d --header="Authorization: Basic ${AUTH_ENCODED}" ${{ steps.release.outputs.nova_dist_url }}
+          wget -d --header="Authorization: Basic ${AUTH_ENCODED}" ${{ steps.releases.outputs.nova_dist_url }}
           git add .
           git commit -m "test"
           git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }} --force
