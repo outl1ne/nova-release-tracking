@@ -28,7 +28,13 @@ jobs:
           git config --global user.email "kaspar.rosin@gmail.com"
           git config --global user.name "Kaspar Rosin"
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
-          rm -rf *
+          git rm -rf .
+          git clean -fxd
           git add .
           git commit -m "test"
           git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5.0.2
+        with:
+          token: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
