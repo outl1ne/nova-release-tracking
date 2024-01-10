@@ -25,8 +25,8 @@ jobs:
       - name: "Create branch and commit changes"
         run: |
           ls -la
-          git config --global user.email "nova.release.tracking@outl1ne.com"
-          git config --global user.name "Nova Release Tracking"
+          git config --global user.email "kaspar.rosin@gmail.com"
+          git config --global user.name "Kaspar Rosin"
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           rm -rf
           git add .
