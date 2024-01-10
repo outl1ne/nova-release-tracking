@@ -23,14 +23,15 @@ jobs:
           token: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
 
       - name: "Create branch and commit changes"
+        env:
+          auth_encoded: "${{ secrets.NOVA_USER }}:${{ secrets.NOVA_4_PASSWORD }}" | base64
         run: |
           ls -la
           git config --global user.email "kaspar.rosin@gmail.com"
           git config --global user.name "Kaspar Rosin"
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           git rm -rf .
-          AUTH_ENCODED=${echo "${{ secrets.NOVA_USER }}:${{ secrets.NOVA_4_PASSWORD }}" | base64}
-          wget --header="Authorization: Basic $AUTH_ENCODED" ${{ steps.release.outputs.nova_dist_url }}
+          wget --header="Authorization: Basic ${auth_encoded}" ${{ steps.release.outputs.nova_dist_url }}
           git add .
           git commit -m "test"
           git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }} --force
