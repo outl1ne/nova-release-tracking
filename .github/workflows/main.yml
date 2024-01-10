@@ -24,7 +24,7 @@ jobs:
 
       - name: "Create branch and commit changes"
         env:
-          auth_encoded: "${{ secrets.NOVA_USER }}:${{ secrets.NOVA_4_PASSWORD }}" | base64
+          auth_encoded: "$(echo ${{ secrets.NOVA_USER }}:${{ secrets.NOVA_4_PASSWORD }} | base64)"
         run: |
           ls -la
           git config --global user.email "kaspar.rosin@gmail.com"
