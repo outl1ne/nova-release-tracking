@@ -32,7 +32,7 @@ jobs:
           git clean -fxd
           git add .
           git commit -m "test"
-          git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }}
+          git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }} --force
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5.0.2
