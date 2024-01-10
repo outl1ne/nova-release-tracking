@@ -24,3 +24,6 @@ jobs:
 
       - name: "Create branch and commit changes"
         run: "ls -la"
+        run: "git checkout -b ${{ steps.releases.vars.next_release_tag }}"
+        run: "rm -rf"
+        run: "git push --set-upstream origin ${{ steps.releases.vars.next_release_tag }}"
