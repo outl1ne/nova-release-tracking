@@ -34048,24 +34048,73 @@ module.exports = parseParams
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
-const core = __nccwpck_require__(2186);
-const github = __nccwpck_require__(5438);
-const semver = __nccwpck_require__(1383);
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5438);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var semver__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(1383);
+/* harmony import */ var semver__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(semver__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
 
 const nova_url = "https://nova.laravel.com";
-const repo = "outl1ne/nova-multiselect-field";
-const github_api_url = "https://api.github.com";
-const latest_release_url = `${github_api_url}/repos/${repo}/releases/latest`;
 
-async function main() {
+async function run() {
+  const token = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("personal_access_tohken");
+  const [owner, repo] = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("target_nova_repo");
+  const octokit = (0,_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(token);
+
   const releases_url = await fetch(`${nova_url}/packages.json`)
     .then((data) => data.json())
     .then((res) => Object.keys(res["includes"])[0]);
@@ -34074,38 +34123,44 @@ async function main() {
     .then((data) => data.json())
     .then((res) => res["packages"]["laravel/nova"]);
 
-  const nova_prod_releases = Object.keys(nova_releases)
+  const nova_release_tags = Object.keys(nova_releases)
     .filter((release) => !release.includes("dev"))
-    .sort(semver.compare)
-    .map(semver.clean);
+    .sort(semver__WEBPACK_IMPORTED_MODULE_2__.compare);
 
-  const current_release = await fetch(latest_release_url)
-    .then((data) => data.json())
-    .then((res) => res["tag_name"]);
+  const current_release = await octokit
+    .request("GET /repos/{owner}/{repo}/releases/latest", {
+      owner,
+      repo,
+    })
+    .then(({ data }) => data["tag_name"])
+    .catch(() => null);
 
-  let next_prod_release;
+  let next_prod_release_tag;
   let has_more_releases = false;
-  const last_nova_release = nova_prod_releases[nova_prod_releases.length - 1];
+  const last_nova_release_tag = nova_release_tags[nova_release_tags.length - 1];
 
   if (current_release) {
-    const current_release_idx = nova_prod_releases.indexOf(current_release);
-    next_prod_release = nova_prod_releases[current_release_idx + 1];
-    has_more_releases = next_prod_release !== last_nova_release;
+    const current_release_idx = nova_releases.indexOf(current_release);
+    next_prod_release_tag = nova_release_tags[current_release_idx + 1];
+    has_more_releases = next_prod_release_tag !== last_nova_release_tag;
   } else {
     // If we don't have existing releases, let's download the two latest
-    next_prod_release = nova_prod_releases.slice(-2)[0];
+    next_prod_release_tag = nova_release_tags.slice(-2)[0];
     has_more_releases = true;
   }
 
-  console.log("current release:", current_release);
-  console.log("next_prod_release:", next_prod_release);
-  console.log("has_more_releases:", has_more_releases);
+  const next_prod_release = nova_releases[next_prod_release_tag];
+  const nova_dist_url = next_prod_release["dist"]["url"];
+
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)("nova_dist_url", nova_dist_url);
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)("next_release_tag", next_prod_release_tag);
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)("current_release_tag", current_release);
 }
 
 try {
-  main();
+  run();
 } catch (error) {
-  core.setFailed(error.message);
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message);
 }
 
 })();

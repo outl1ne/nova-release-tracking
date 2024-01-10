@@ -1,5 +1,19 @@
 name: "Laravel Nova Sync Action"
 description: "Syncs laravel nova to custom repository"
+inputs:
+  personal_access_token:
+    description: "Personal access token to access git"
+    required: true
+  target_nova_repo:
+    description: "Repository name with owner where the target nova repo is"
+    required: true
+outputs:
+  next_release_tag:
+    description: "Version we are about to install"
+  current_release_tag:
+    description: "Version we have currently installed"
+  nova_dist_url:
+    description: "URL for next release's source code"
 runs:
   using: "node20"
   main: "../../../dist/index.js"

@@ -1,13 +1,14 @@
-const core = require("@actions/core");
-const github = require("@actions/github");
-const semver = require("semver");
+import { getInput, setOutput, setFailed } from "@actions/core";
+import { getOctokit } from "@actions/github";
+import { compare } from "semver";
 
 const nova_url = "https://nova.laravel.com";
-const repo = "outl1ne/nova-multiselect-field";
-const github_api_url = "https://api.github.com";
-const latest_release_url = `${github_api_url}/repos/${repo}/releases/latest`;
 
-async function main() {
+async function run() {
+  const token = getInput("personal_access_tohken");
+  const [owner, repo] = getInput("target_nova_repo");
+  const octokit = getOctokit(token);
+
   const releases_url = await fetch(`${nova_url}/packages.json`)
     .then((data) => data.json())
     .then((res) => Object.keys(res["includes"])[0]);
@@ -16,36 +17,42 @@ async function main() {
     .then((data) => data.json())
     .then((res) => res["packages"]["laravel/nova"]);
 
-  const nova_prod_releases = Object.keys(nova_releases)
+  const nova_release_tags = Object.keys(nova_releases)
     .filter((release) => !release.includes("dev"))
-    .sort(semver.compare)
-    .map(semver.clean);
+    .sort(compare);
 
-  const current_release = await fetch(latest_release_url)
-    .then((data) => data.json())
-    .then((res) => res["tag_name"]);
+  const current_release = await octokit
+    .request("GET /repos/{owner}/{repo}/releases/latest", {
+      owner,
+      repo,
+    })
+    .then(({ data }) => data["tag_name"])
+    .catch(() => null);
 
-  let next_prod_release;
+  let next_prod_release_tag;
   let has_more_releases = false;
-  const last_nova_release = nova_prod_releases[nova_prod_releases.length - 1];
+  const last_nova_release_tag = nova_release_tags[nova_release_tags.length - 1];
 
   if (current_release) {
-    const current_release_idx = nova_prod_releases.indexOf(current_release);
-    next_prod_release = nova_prod_releases[current_release_idx + 1];
-    has_more_releases = next_prod_release !== last_nova_release;
+    const current_release_idx = nova_releases.indexOf(current_release);
+    next_prod_release_tag = nova_release_tags[current_release_idx + 1];
+    has_more_releases = next_prod_release_tag !== last_nova_release_tag;
   } else {
     // If we don't have existing releases, let's download the two latest
-    next_prod_release = nova_prod_releases.slice(-2)[0];
+    next_prod_release_tag = nova_release_tags.slice(-2)[0];
     has_more_releases = true;
   }
 
-  console.log("current release:", current_release);
-  console.log("next_prod_release:", next_prod_release);
-  console.log("has_more_releases:", has_more_releases);
+  const next_prod_release = nova_releases[next_prod_release_tag];
+  const nova_dist_url = next_prod_release["dist"]["url"];
+
+  setOutput("nova_dist_url", nova_dist_url);
+  setOutput("next_release_tag", next_prod_release_tag);
+  setOutput("current_release_tag", current_release);
 }
 
 try {
-  main();
+  run();
 } catch (error) {
-  core.setFailed(error.message);
+  setFailed(error.message);
 }

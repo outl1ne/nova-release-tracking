@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prod": "ncc build index.js"
+    "prod": "ncc build index.js",
+    "start": "ncc run index.js"
   },
   "keywords": [],
   "author": "",
