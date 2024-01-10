@@ -32,8 +32,9 @@ jobs:
           git config --global user.name "Kaspar Rosin"
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           git rm -rf .
-          AUTH_ENCODED=$(echo "${NOVA_USER}:${NOVA_PASSWORD}"| base64)
+          AUTH_ENCODED=$(echo "${{ secrets.NOVA_USER }}:${ secrets.NOVA_4_PASSWORD}}"| base64)
           echo $NOVA_USER
+          echo "Value of NOVA_USER: $NOVA_USER"
           echo "IN THE MIDDLE"
           echo ${{ secrets.NOVA_USER }}
           wget -d --header="Authorization: Basic ${AUTH_ENCODED}" ${{ steps.release.outputs.nova_dist_url }}
