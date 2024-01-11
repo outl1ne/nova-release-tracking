@@ -24,14 +24,16 @@ jobs:
         env:
           NOVA_USER: ${{ secrets.NOVA_USER }}
           NOVA_PASSWORD: ${{ secrets.NOVA_PASSWORD }}
+          NOVA_AUTH_ENCODED: ${{ steps.releases.outputs.nova_auth_encoded }}
         run: |
           ls -la
           git config --global user.email "kaspar.rosin@gmail.com"
           git config --global user.name "Kaspar Rosin"
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           git rm -rf .
+          echo "Test ${{ env.NOVA_AUTH_ENCODED }} end"
           wget -d  \
-            --header="Authorization: Basic ${{ steps.releases.outputs.nova_auth_encoded }}" \
+            --header="Authorization: Basic ${{ env.NOVA_AUTH_ENCODED }}" \
             ${{ steps.releases.outputs.nova_dist_url }}
           git add .
           git commit -m "test"
