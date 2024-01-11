@@ -29,7 +29,7 @@ jobs:
           NOVA_AUTH_ENCODED: ${{ steps.releases.outputs.nova_auth_encoded }}
         run: |
           # git checkout -b ${{ steps.releases.outputs.next_release_tag }}
-          git rm -rf .
+          git rm -rfq .
           git config --global user.email "kaspar.rosin@gmail.com"
           git config --global user.name "Kaspar Rosin"
           # git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
@@ -37,8 +37,9 @@ jobs:
             --output-document=nova.zip \
             --header="Authorization: Basic ${{ env.NOVA_AUTH_ENCODED }}" \
             ${{ steps.releases.outputs.nova_dist_url }}
-          unzip nova.zip
+          unzip -qq nova.zip
           rm nova.zip
+          ls -la
           git add .
           git commit -m ${{ steps.releases.outputs.next_release_tag }}
           git push --force
