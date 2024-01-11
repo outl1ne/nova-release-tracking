@@ -31,7 +31,8 @@ jobs:
           git config --global user.name "Kaspar Rosin"
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           git rm -rf .
-          echo "Test ${{ env.NOVA_AUTH_ENCODED }} end"
+          echo "Test ${{ steps.releases.outputs.nova_auth_encoded }} end"
+          echo "Test2 ${NOVA_AUTH_ENCODED} end"
           wget -d  \
             --header="Authorization: Basic ${{ env.NOVA_AUTH_ENCODED }}" \
             ${{ steps.releases.outputs.nova_dist_url }}
