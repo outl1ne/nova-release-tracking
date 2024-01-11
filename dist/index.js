@@ -34113,6 +34113,9 @@ const nova_url = "https://nova.laravel.com";
 async function run() {
   const token = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("personal_access_token");
   const [owner, repo] = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("target_nova_repo");
+  const nova_user = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("nova_user");
+  const nova_password = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("nova_password");
+  const auth_encoded = btoa(`${nova_user}:${nova_password}`);
   const octokit = (0,_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(token);
 
   const releases_url = await fetch(`${nova_url}/packages.json`)
@@ -34155,6 +34158,7 @@ async function run() {
   (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)("nova_dist_url", nova_dist_url);
   (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)("next_release_tag", next_prod_release_tag);
   (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)("current_release_tag", current_release);
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setSecret)("nova_auth_encoded", auth_encoded);
 }
 
 try {
