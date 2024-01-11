@@ -40,7 +40,7 @@ jobs:
           unzip nova.zip
           rm nova.zip
           git add .
-          git commit -m "${{ steps.releases.outputs.next_release_tag }}"
+          git commit -m ${{ steps.releases.outputs.next_release_tag }}
           git push --force
           # git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }} --force
           # gh pr create \
