@@ -7,6 +7,12 @@ inputs:
   target_nova_repo:
     description: "Repository name with owner where the target nova repo is"
     required: true
+  nova_user:
+    description: "Nova Liscense Name"
+    required: true
+  nova_password:
+    description: "Nova Liscense Password"
+    required: true
 outputs:
   next_release_tag:
     description: "Version we are about to install"

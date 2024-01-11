@@ -1,4 +1,4 @@
-import { getInput, setOutput, setFailed } from "@actions/core";
+import { getInput, setOutput, setFailed, setSecret } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import { compare } from "semver";
 
@@ -7,6 +7,9 @@ const nova_url = "https://nova.laravel.com";
 async function run() {
   const token = getInput("personal_access_token");
   const [owner, repo] = getInput("target_nova_repo");
+  const nova_user = getInput("nova_user");
+  const nova_password = getInput("nova_password");
+  const auth_encoded = btoa(`${nova_user}:${nova_password}`);
   const octokit = getOctokit(token);
 
   const releases_url = await fetch(`${nova_url}/packages.json`)
@@ -49,6 +52,7 @@ async function run() {
   setOutput("nova_dist_url", nova_dist_url);
   setOutput("next_release_tag", next_prod_release_tag);
   setOutput("current_release_tag", current_release);
+  setSecret("nova_auth_encoded", auth_encoded);
 }
 
 try {
