@@ -1,4 +1,5 @@
-import { getInput, setOutput, setFailed, setSecret } from "@actions/core";
+require("dotenv").config();
+import { getInput, setOutput, setFailed } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import { compare } from "semver";
 
@@ -6,10 +7,9 @@ const nova_url = "https://nova.laravel.com";
 
 async function run() {
   const token = getInput("personal_access_token");
-  const [owner, repo] = getInput("target_nova_repo");
+  const [owner, repo] = getInput("target_nova_repo").split("/");
   const nova_user = getInput("nova_user");
   const nova_password = getInput("nova_password");
-  console.log(`test inside ${nova_user}`);
   const auth_encoded = btoa(`${nova_user}:${nova_password}`);
   const octokit = getOctokit(token);
 
@@ -38,7 +38,7 @@ async function run() {
   const last_nova_release_tag = nova_release_tags[nova_release_tags.length - 1];
 
   if (current_release) {
-    const current_release_idx = nova_releases.indexOf(current_release);
+    const current_release_idx = nova_release_tags.indexOf(current_release);
     next_prod_release_tag = nova_release_tags[current_release_idx + 1];
     has_more_releases = next_prod_release_tag !== last_nova_release_tag;
   } else {
