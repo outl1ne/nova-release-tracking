@@ -21,7 +21,7 @@ jobs:
 
       - name: "Verify we have next release"
         uses: andymckay/cancel-action@0.3
-        if: ${{ steps.releases.outputs.next_release_tag }}
+        if: ${{ steps.releases.outputs.next_release_tag != "" }}
 
       - uses: actions/checkout@v4
         name: "Checkout target nova repository"
