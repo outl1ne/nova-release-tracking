@@ -35,8 +35,11 @@ jobs:
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           git rm -rf .
           wget -d  \
+            --output-document=nova.zip \
             --header="Authorization: Basic ${{ env.NOVA_AUTH_ENCODED }}" \
             ${{ steps.releases.outputs.nova_dist_url }}
+          unzip nova.zip
+          rm nova.zip
           git add .
           git commit -m "test"
           git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }} --force
