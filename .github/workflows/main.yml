@@ -19,42 +19,39 @@ jobs:
           nova_user: ${{ secrets.NOVA_USER }}
           nova_password: ${{ secrets.NOVA_PASSWORD }}
 
+      - name: "Verify we have next release"
+        uses: andymckay/cancel-action@0.3
+        if: ${{ steps.releases.outputs.next_release_tag }}
+
       - uses: actions/checkout@v4
+        name: "Checkout target nova repository"
         with:
           repository: ${{ vars.TARGET_NOVA_REPO }}
           token: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
-      - name: "Create branch and commit changes"
+
+      - name: "Update tracking repository"
         env:
           GH_TOKEN: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
           NOVA_AUTH_ENCODED: ${{ steps.releases.outputs.nova_auth_encoded }}
         run: |
-          # git checkout -b ${{ steps.releases.outputs.next_release_tag }}
           git rm -rfq .
           git config --global user.email "kaspar.rosin@gmail.com"
           git config --global user.name "Kaspar Rosin"
-          # git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
-          wget -dq  \
-            --output-document=nova.zip \
+
+          # Install nova zip file
+          wget -dq \
+            --output-document nova.zip \
             --header="Authorization: Basic ${{ env.NOVA_AUTH_ENCODED }}" \
             ${{ steps.releases.outputs.nova_dist_url }}
+
+          # Extract and delete zip file
           unzip -qq nova.zip
           rm nova.zip
-          ls -la
+
+          # Commit changes & create release
           git add .
-          echo "added"
           git commit -m ${{ steps.releases.outputs.next_release_tag }}
-          echo "commited"
           git push --force
-          echo "pushed"
-          # git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }} --force
-          # gh pr create \
-          #   -b "Nova Release: ${{ steps.releases.outputs.next_release_tag }}" \
-          #   -t "Release Tracking: ${{ steps.releases.outputs.next_release_tag }}" \
-          # gh pr merge ${{ steps.releases.outputs.next_release_tag }}
-          # git checkout -b "main"
           git tag ${{ steps.releases.outputs.next_release_tag }}
-          echo "tagged"
           git push --tags
-          echo "tag pushed"
           gh release create ${{ steps.releases.outputs.next_release_tag }}
-          echo "released"

@@ -1,5 +1,5 @@
 require("dotenv").config();
-import { getInput, setOutput, setFailed } from "@actions/core";
+import { getInput, setOutput, setFailed, info } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import { compare } from "semver";
 
@@ -45,6 +45,11 @@ async function run() {
     // If we don't have existing releases, let's download the two latest
     next_prod_release_tag = nova_release_tags.slice(-2)[0];
     has_more_releases = true;
+  }
+
+  if (!next_prod_release_tag) {
+    info("Already at the latest release!");
+    return;
   }
 
   const next_prod_release = nova_releases[next_prod_release_tag];
