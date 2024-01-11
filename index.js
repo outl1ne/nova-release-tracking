@@ -49,7 +49,7 @@ async function run() {
 
   if (!next_prod_release_tag) {
     info("Already at the latest release!");
-    return;
+    setFailed("Nothing to install");
   }
 
   const next_prod_release = nova_releases[next_prod_release_tag];

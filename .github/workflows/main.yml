@@ -19,10 +19,6 @@ jobs:
           nova_user: ${{ secrets.NOVA_USER }}
           nova_password: ${{ secrets.NOVA_PASSWORD }}
 
-      - name: "Verify we have next release"
-        uses: andymckay/cancel-action@0.3
-        if: ${{ steps.releases.outputs.next_release_tag != '' }}
-
       - uses: actions/checkout@v4
         name: "Checkout target nova repository"
         with:
