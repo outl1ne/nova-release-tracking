@@ -31,7 +31,7 @@ jobs:
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           git rm -rf .
           wget -d  \
-            --header="Authorization: Basic ${{ steps.releases.outputs.nova_auth_encoded }}" \
+            --header="Authorization: Basic ${{ secrets.nova_auth_encoded }}" \
             ${{ steps.releases.outputs.nova_dist_url }}
           git add .
           git commit -m "test"
