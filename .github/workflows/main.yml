@@ -41,14 +41,20 @@ jobs:
           rm nova.zip
           ls -la
           git add .
+          echo "added"
           git commit -m ${{ steps.releases.outputs.next_release_tag }}
+          echo "commited"
           git push --force
+          echo "pushed"
           # git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }} --force
           # gh pr create \
           #   -b "Nova Release: ${{ steps.releases.outputs.next_release_tag }}" \
           #   -t "Release Tracking: ${{ steps.releases.outputs.next_release_tag }}" \
           # gh pr merge ${{ steps.releases.outputs.next_release_tag }}
           # git checkout -b "main"
-          git tag -a ${{ steps.releases.outputs.next_release_tag }}
+          git tag ${{ steps.releases.outputs.next_release_tag }}
+          echo "tagged"
           git push --tags
+          echo "tag pushed"
           gh release create ${{ steps.releases.outputs.next_release_tag }}
+          echo "released"
