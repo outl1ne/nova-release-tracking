@@ -30,8 +30,8 @@ jobs:
           git config --global user.name "Kaspar Rosin"
           git checkout -b "${{ steps.releases.outputs.next_release_tag }}"
           git rm -rf .
-          wget -d 
-            --header="Authorization: Basic ${{ secrets.nova_auth_encoded }}"
+          wget -d  \
+            --header="Authorization: Basic ${{ secrets.nova_auth_encoded }}" \
             ${{ steps.releases.outputs.nova_dist_url }}
           git add .
           git commit -m "test"
