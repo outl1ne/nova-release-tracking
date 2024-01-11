@@ -1,7 +1,7 @@
 on:
   schedule:
-    # twice a day at midnight and afternoon
-    - cron: "0/12 * * *"
+    # twice a day at 1am & 1pm
+    - cron: "00 01,13 * *"
 jobs:
   sync_laravel_nova_job:
     runs-on: ubuntu-latest
