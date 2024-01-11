@@ -1,4 +1,4 @@
-import { getInput, setOutput, setFailed, setSecret, warning } from "@actions/core";
+import { getInput, setOutput, setFailed, setSecret } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import { compare } from "semver";
 
@@ -9,7 +9,7 @@ async function run() {
   const [owner, repo] = getInput("target_nova_repo");
   const nova_user = getInput("nova_user");
   const nova_password = getInput("nova_password");
-  warning("test: ". "inside ".nova_user);
+  console.log(`test inside ${nova_user}`);
   const auth_encoded = btoa(`${nova_user}:${nova_password}`);
   const octokit = getOctokit(token);
 
