@@ -21,7 +21,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          name: ${{ vars.TARGET_NOVA_REPO }}
+          repository: ${{ vars.TARGET_NOVA_REPO }}
           token: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
       - name: "Create branch and commit changes"
         env:
