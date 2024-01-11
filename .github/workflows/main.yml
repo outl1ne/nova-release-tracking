@@ -28,6 +28,7 @@ jobs:
           GH_TOKEN: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
           GIT_AUTHOR_NAME: "Kaspar Rosin"
           GIT_AUTHOR_EMAIL: "kaspar.rosin@gmail.com"
+          NOVA_AUTH_ENCODED: ${{ steps.releases.outputs.nova_auth_encoded }}
         run: |
           # git checkout -b ${{ steps.releases.outputs.next_release_tag }}
           git rm -rf .
