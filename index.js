@@ -52,7 +52,7 @@ async function run() {
   setOutput("nova_dist_url", nova_dist_url);
   setOutput("next_release_tag", next_prod_release_tag);
   setOutput("current_release_tag", current_release);
-  setSecret("nova_auth_encoded", auth_encoded);
+  setOutput("nova_auth_encoded", auth_encoded);
 }
 
 try {
