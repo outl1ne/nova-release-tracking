@@ -43,3 +43,4 @@ jobs:
           git add .
           git commit -m "test"
           git push --set-upstream origin ${{ steps.releases.outputs.next_release_tag }} --force
+          gh auth status
