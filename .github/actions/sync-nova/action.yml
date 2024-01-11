@@ -20,6 +20,8 @@ outputs:
     description: "Version we have currently installed"
   nova_dist_url:
     description: "URL for next release's source code"
+  nova_auth_encoded:
+    description: "Basic Authorization Header for Nova"
 runs:
   using: "node20"
   main: "../../../dist/index.js"
