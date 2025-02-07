@@ -49,7 +49,8 @@ async function run() {
 
   if (!next_prod_release_tag) {
     info("Already at the latest release!");
-    setFailed("Nothing to install");
+    process.exitCode = 78; 
+    return; 
   }
 
   const next_prod_release = nova_releases[next_prod_release_tag];
