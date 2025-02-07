@@ -23,11 +23,13 @@ jobs:
 
       - uses: actions/checkout@v4
         name: "Checkout target nova repository"
+        if: steps.releases.outputs.next_release_tag != '' # ✅ Skip if empty
         with:
           repository: ${{ vars.TARGET_NOVA_REPO }}
           token: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
 
       - name: "Update tracking repository"
+        if: steps.releases.outputs.next_release_tag != ''
         env:
           GH_TOKEN: ${{ secrets.NOVA_REPO_ACCESS_TOKEN }}
           NOVA_AUTH_ENCODED: ${{ steps.releases.outputs.nova_auth_encoded }}
