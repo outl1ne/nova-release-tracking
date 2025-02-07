@@ -1,7 +1,9 @@
 on:
   schedule:
-    # twice a day at 1am & 1pm
+    # Twice a day at 1 AM & 1 PM
     - cron: "0 1,13 * * *"
+  workflow_dispatch:  # Allows manual trigger
+
 
 jobs:
   sync_laravel_nova_job:
