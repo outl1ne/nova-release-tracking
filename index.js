@@ -1,5 +1,5 @@
 require("dotenv").config();
-import { getInput, setOutput, setFailed, info } from "@actions/core";
+import { getInput, setOutput, setFailed, info, warning } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import { compare } from "semver";
 
@@ -49,10 +49,8 @@ async function run() {
 
   if (!next_prod_release_tag || !nova_releases[next_prod_release_tag]) {
     console.log("🚨 No valid next release tag found.");
-    console.log("next_prod_release_tag:", next_prod_release_tag);
-    console.log("Available nova_releases:", Object.keys(nova_releases));
-    process.exitCode = 78; 
-    return; 
+    warning("Already at the latest release! Nothing to install.");
+    process.exit(0);
   }
 
   const next_prod_release = nova_releases[next_prod_release_tag];
