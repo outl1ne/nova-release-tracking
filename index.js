@@ -47,8 +47,10 @@ async function run() {
     has_more_releases = true;
   }
 
-  if (!next_prod_release_tag) {
-    info("Already at the latest release!");
+  if (!next_prod_release_tag || !nova_releases[next_prod_release_tag]) {
+    console.log("🚨 No valid next release tag found.");
+    console.log("next_prod_release_tag:", next_prod_release_tag);
+    console.log("Available nova_releases:", Object.keys(nova_releases));
     process.exitCode = 78; 
     return; 
   }
